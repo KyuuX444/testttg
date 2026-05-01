@@ -1,0 +1,19 @@
+{
+  "name": "ryuka-pairing-system",
+  "version": "1.0.0",
+  "description": "Simple pairing system for WhatsApp bot",
+  "main": "api/index.js",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.6.0",
+    "pino": "^8.19.0",
+    "link-preview-js": "^3.0.4",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "vercel dev"
+  }
+}
