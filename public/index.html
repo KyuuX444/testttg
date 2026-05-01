@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryuka Bot Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="flex flex-col items-center justify-center min-h-screen">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-blue-500">
+            <h1 class="text-2xl font-bold mb-6 text-center text-blue-400">Bot Pairing System</h1>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm mb-2 text-gray-400">Nomor WhatsApp (62xxx)</label>
+                    <input type="number" id="number" class="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-blue-500" placeholder="628123456789">
+                </div>
+                
+                <button onclick="startPairing()" id="btn-pair" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded font-bold transition">
+                    Dapatkan Kode Pairing
+                </button>
+
+                <div id="loading" class="hidden text-center text-yellow-500 animate-pulse">Memproses permintaan...</div>
+                
+                <div id="result-container" class="hidden mt-6 p-4 bg-gray-900 rounded border border-dashed border-gray-500">
+                    <p class="text-sm text-gray-400 text-center mb-2">Kode Anda:</p>
+                    <p id="pairing-code" class="text-3xl font-mono font-bold text-center text-green-400 tracking-widest"></p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-xs text-gray-500 text-center">
+                Note: Bot hanya akan aktif selama proses pairing di Vercel hidup.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function startPairing() {
+            const num = document.getElementById('number').value;
+            const btn = document.getElementById('btn-pair');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result-container');
+            const codeDisp = document.getElementById('pairing-code');
+
+            if(!num) return alert("Nomor wajib diisi!");
+
+            btn.classList.add('hidden');
+            loading.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                const res = await fetch(`/api?number=${num}`);
+                const data = await res.json();
+                
+                if(data.status) {
+                    codeDisp.innerText = data.code;
+                    result.classList.remove('hidden');
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (e) {
+                alert("Gagal menghubungi server.");
+            } finally {
+                loading.classList.add('hidden');
+                btn.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
