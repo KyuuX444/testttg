@@ -134,6 +134,9 @@ global.bot = {
 
 ## 📁 Struktur Proyek
 
+<details>
+<summary>Lihat struktur lengkap</summary>
+
 ```
 kyu-bot/
 ├── core/
@@ -167,6 +170,8 @@ kyu-bot/
 ├── index.js             → Entry point
 └── package.json
 ```
+
+</details>
 
 ---
 
@@ -227,8 +232,6 @@ export default {
 };
 ```
 
----
-
 ### Format Baru — Handler Function
 
 Parameter: `handler(m, { conn, db, args, text })`
@@ -239,7 +242,7 @@ let handler = async (m, { conn, db, args, text }) => {
   m.reply(`Kamu bilang: ${text}`);
 };
 
-handler.help        = ['echo'];          // index 0 = nama utama
+handler.help        = ['echo'];
 handler.tags        = ['tools'];
 handler.command     = /^echo$/i;
 handler.description = 'Ulangi teks kamu';
@@ -248,8 +251,6 @@ handler.register    = false;
 
 export default handler;
 ```
-
----
 
 ### Format Baru dengan Before Handler
 
@@ -269,7 +270,6 @@ handler.before = async (m, { conn, db }) => {
   const id = msg.selectedButtonId || '';
   if (!id.startsWith(PREFIX)) return;
 
-  // proses button click di sini
   await conn.sendMessage(m.chat, { text: 'Tombol ditekan!' }, { quoted: m });
 };
 
@@ -286,7 +286,7 @@ export default handler;
 
 | Property | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `handler.help` | `string[]` | `[]` | Nama command — index 0 = nama utama, sisanya jadi alias |
+| `handler.help` | `string[]` | `[]` | Nama command — index 0 = nama utama, sisanya alias |
 | `handler.tags` | `string[]` | `[]` | Kategori plugin, tampil di menu |
 | `handler.command` | `RegExp` | — | **Wajib.** Regex untuk trigger command |
 | `handler.description` | `string` | `''` | Deskripsi singkat |
@@ -433,7 +433,8 @@ export default handler;
 
 `ctx` adalah hasil serialisasi pesan dari `core/serialize.js`. Tersedia sebagai parameter ke-2 di format lama: `execute(kyu, ctx, msg)`.
 
-### Properties
+<details>
+<summary><b>Properties</b></summary>
 
 ```ts
 ctx.id           : string        // JID chat (group / private)
@@ -463,7 +464,10 @@ ctx.timestamp    : number        // Timestamp pesan (milliseconds)
 ctx.device       : string        // 'Web' | 'Android' | 'Unknown'
 ```
 
-### Methods
+</details>
+
+<details>
+<summary><b>Methods</b></summary>
 
 ```js
 ctx.reply('Teks')                        // Balas pesan
@@ -476,7 +480,10 @@ const buf = await ctx.download()         // Download media → Buffer
 const name = ctx.getName()               // Nama pengirim
 ```
 
-### ctx.quoted
+</details>
+
+<details>
+<summary><b>ctx.quoted</b></summary>
 
 ```js
 ctx.quoted.message    // Raw quotedMessage
@@ -490,11 +497,16 @@ ctx.quoted.mimetype   // MIME type
 ctx.quoted.media      // Raw media content
 ```
 
+</details>
+
 ---
 
 ## 🗃️ Database Schema
 
 Database disimpan di `data/database.json`, diakses via `global.db`.
+
+<details>
+<summary><b>Lihat schema lengkap</b></summary>
 
 ```js
 global.db = {
@@ -525,6 +537,8 @@ global.db = {
 }
 ```
 
+</details>
+
 **Cara baca dan simpan:**
 
 ```js
@@ -539,7 +553,8 @@ db.write(global.db);                  // Simpan ke disk
 
 ## 🧩 Cara Buat Plugin
 
-### Plugin Teks Sederhana
+<details>
+<summary><b>Plugin teks sederhana</b></summary>
 
 `plugins/tools/ping.js`
 
@@ -558,7 +573,10 @@ export default {
 };
 ```
 
-### Plugin Media + Limit
+</details>
+
+<details>
+<summary><b>Plugin media + limit</b></summary>
 
 `plugins/random/fox.js`
 
@@ -589,7 +607,10 @@ handler.limit       = true;
 export default handler;
 ```
 
-### Plugin dengan State Sequential
+</details>
+
+<details>
+<summary><b>Plugin dengan state sequential</b></summary>
 
 `plugins/random/mywaifu.js`
 
@@ -637,6 +658,8 @@ handler.register    = true;
 export default handler;
 ```
 
+</details>
+
 ---
 
 ## 🔥 Hot-Reload
@@ -648,8 +671,6 @@ Bot menggunakan **chokidar** untuk memantau folder `plugins/` secara real-time.
 | File baru ditambahkan | `loadPlugin()` otomatis |
 | File diubah / disimpan | `reloadPlugin()` otomatis |
 | File dihapus | `unloadPlugin()` otomatis |
-
-Bisa juga dilakukan manual dari kode:
 
 ```js
 // Reload satu plugin
